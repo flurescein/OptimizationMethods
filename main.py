@@ -1,30 +1,8 @@
-from optimization_methods.one_dimensional import *
-import math
-import time
+from output_functions import *
 
 
-def print_method_test(a, b, f, method, method_name):
-    """Выводит результат и время работы метода."""
-    start_time = time.time()
-    result = round(method(a, b, f), 2)
-    end_time = time.time()
-
-    print(method_name, '\t', result, '\t', end_time - start_time)
-
-
-def print_methods_tests(a, b, f):
-    """Выводит результат и время работы всех методов."""
-    print('Method name\t', 'Result\t', 'Time')
-    print_method_test(a, b, f, passive_search, 'Passive')
-    print_method_test(a, b, f, dichotomy, 'Dichotomy')
-    print_method_test(a, b, f, golden_ratio, 'Golden r..')
-    print_method_test(a, b, f, fibonacci_search, 'Fibonacci')
-    print_method_test(a, b, f, tangents, 'Tangents')
-    print_method_test(a, b, f, newton_raphson, 'New-Rap')
-    print_method_test(a, b, f, secants, 'Secants')
-
-
-def function(x, derivative_order=0):
+# 17.70
+def one_dimensional_function(x, derivative_order=0):
     return {
         0: math.sqrt(1 + x ** 2) + math.exp(-2 * x),
         1: x / math.sqrt(x ** 2 + 1) - 2 * math.exp(-2 * x),
@@ -33,5 +11,21 @@ def function(x, derivative_order=0):
     }.get(derivative_order,
           ValueError('Введен недопустимый порядок производной.'))
 
+
+# 17.143
+def multidimensional_function(arguments, gradient=False, hessian=False):
+    if not (gradient or hessian):
+        return 3 * arguments[0] ** 2 + 5 * arguments[1] ** 2 + 4 * arguments[2] ** 2 + 2 * arguments[0] * arguments[1] - arguments[0] * arguments[2] - arguments[1] * arguments[2] + 7 * arguments[0] + arguments[2]
+    elif gradient:
+        return [6 * arguments[0] + 2 * arguments[1] - arguments[2] + 7,
+                10 * arguments[1] + 2 * arguments[0] - arguments[2], 8 * arguments[2] - arguments[0] - arguments[1] + 1]
+    else:
+        return [[6, 2,  -1],
+                [2, 10, -1],
+                [-1, -1, 8]]
+
+
 if __name__ == '__main__':
-    print_methods_tests(0, 1, function)
+    print_one_dimensional_methods_tests(0, 1, one_dimensional_function)
+    print()
+    print_multidimensional_methods_tests(multidimensional_function, 3)
